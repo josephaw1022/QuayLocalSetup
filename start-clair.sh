@@ -68,11 +68,3 @@ podman run -d \
 sleep 2
 podman logs --tail=80 "$CLAIR_CONT" || true
 
-echo
-echo "=============================================="
-echo "Add to Quay config.yaml (once):"
-echo "FEATURE_SECURITY_SCANNER: true"
-echo "SECURITY_SCANNER_V4_ENDPOINT: http://host.containers.internal:${CLAIR_PORT}"
-echo "SECURITY_SCANNER_V4_PSK: \"${PSK}\""
-echo "=============================================="
-echo "Clair at http://localhost:${CLAIR_PORT}"
