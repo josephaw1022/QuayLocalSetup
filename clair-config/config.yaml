@@ -1,0 +1,34 @@
+log_level: info
+introspection_addr: ""
+http_listen_addr: ":6060"
+
+indexer:
+  connstring: "host=host.containers.internal port=5433 user=clair password=clairpass dbname=clair sslmode=disable"
+  migrations: true
+  # keep these conservative so startup isn't noisy
+  scanlock_retry: 10
+  layer_scan_concurrency: 2
+  airgap: false
+
+matcher:
+  connstring: "host=host.containers.internal port=5433 user=clair password=clairpass dbname=clair sslmode=disable"
+  migrations: true
+
+
+
+notifier:
+  connstring: "host=host.containers.internal port=5433 user=clair password=clairpass dbname=clair sslmode=disable"
+  migrations: true
+  poll_interval: "15s"
+  delivery_interval: "5s"
+  webhook:
+    target: "http://host.containers.internal:8080/secscan/notification"
+    callback: "http://localhost:6060/notifier/api/v1/notification"
+
+auth:
+  psk:
+    key: "87434f1ee095c448b241c4379ea0047396904f5da42c14bdef606b47869a7961"
+    iss: ["quay"]
+
+metrics:
+  name: "prometheus"
