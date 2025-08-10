@@ -4,21 +4,21 @@ CONTAINER_NAME=quay-redis
 VOLUME_NAME=quay-redis-data
 
 # Stop and remove container if it exists
-if podman ps -a --format "{{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
+if docker ps -a --format "{{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
     echo "Stopping and removing existing container: ${CONTAINER_NAME}"
-    podman stop "${CONTAINER_NAME}"
-    podman rm -f "${CONTAINER_NAME}"
+    docker stop "${CONTAINER_NAME}"
+    docker rm -f "${CONTAINER_NAME}"
 fi
 
 # Remove old volume if it exists
-if podman volume ls --format "{{.Name}}" | grep -q "^${VOLUME_NAME}$"; then
+if docker volume ls --format "{{.Name}}" | grep -q "^${VOLUME_NAME}$"; then
     echo "Removing old volume: ${VOLUME_NAME}"
-    podman volume rm -f "${VOLUME_NAME}"
+    docker volume rm -f "${VOLUME_NAME}"
 fi
 
 # Create new Valkey container
 echo "Creating fresh Valkey container..."
-podman run -d \
+docker run -d \
   --name "${CONTAINER_NAME}" \
   --restart always \
   -v "${VOLUME_NAME}":/data:Z \

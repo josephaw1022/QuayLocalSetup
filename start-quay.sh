@@ -10,21 +10,21 @@ VOLUME_NAME=quay-storage           # named volume for persistent storage
 [[ -d "$CONFIG_DIR" ]] || { echo "Missing $CONFIG_DIR (your config bundle)"; exit 1; }
 
 # stop/remove existing container
-if podman ps -a --format '{{.Names}}' | grep -qx "$CONTAINER_NAME"; then
+if docker ps -a --format '{{.Names}}' | grep -qx "$CONTAINER_NAME"; then
   echo "Stopping and removing existing container: $CONTAINER_NAME"
-  podman stop "$CONTAINER_NAME" >/dev/null || true
-  podman rm -f "$CONTAINER_NAME" >/dev/null || true
+  docker stop "$CONTAINER_NAME" >/dev/null || true
+  docker rm -f "$CONTAINER_NAME" >/dev/null || true
 fi
 
 # create volume if missing
-if ! podman volume ls --format '{{.Name}}' | grep -qx "$VOLUME_NAME"; then
+if ! docker volume ls --format '{{.Name}}' | grep -qx "$VOLUME_NAME"; then
   echo "Creating volume: $VOLUME_NAME"
-  podman volume create "$VOLUME_NAME" >/dev/null
+  docker volume create "$VOLUME_NAME" >/dev/null
 fi
 
 # run quay
 echo "Starting Quay..."
-podman run -d \
+docker run -d \
   --name "$CONTAINER_NAME" \
   --restart always \
   -p 80:8080 \

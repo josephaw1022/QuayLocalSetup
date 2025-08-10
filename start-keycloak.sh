@@ -5,7 +5,7 @@ set -euo pipefail
 KC_NAME=keycloak
 KC_IMAGE=quay.io/keycloak/keycloak:latest
 KC_VOL=keycloak-data
-KC_HOST=keycloak.localhost
+KC_HOST=localhost
 KC_PORT=8080                 # host port -> container 8080
 KC_ADMIN=admin
 KC_PASS=admin
@@ -17,21 +17,21 @@ QUAY_HOST=quayregistry.localhost
 command -v jq >/dev/null || { echo "jq is required"; exit 1; }
 
 # --- fresh start: remove container + volume, then recreate volume ---
-if podman ps -a --format '{{.Names}}' | grep -qx "$KC_NAME"; then
+if docker ps -a --format '{{.Names}}' | grep -qx "$KC_NAME"; then
   echo "Stopping/removing $KC_NAME..."
-  podman rm -f "$KC_NAME" >/dev/null || true
+  docker rm -f "$KC_NAME" >/dev/null || true
 fi
 
-if podman volume ls --format '{{.Name}}' | grep -qx "$KC_VOL"; then
+if docker volume ls --format '{{.Name}}' | grep -qx "$KC_VOL"; then
   echo "Removing volume $KC_VOL..."
-  podman volume rm -f "$KC_VOL" >/dev/null || true
+  docker volume rm -f "$KC_VOL" >/dev/null || true
 fi
 
 echo "Creating volume $KC_VOL..."
-podman volume create "$KC_VOL" >/dev/null
+docker volume create "$KC_VOL" >/dev/null
 
 echo "Starting Keycloak..."
-podman run -d \
+docker run -d \
   --name "$KC_NAME" \
   --restart always \
   -p "${KC_PORT}:8080" \

@@ -11,6 +11,7 @@ containers=(
   clair-postgres  # Clair DB
   quay-redis      # Redis/Valkey
   quay-config-ui  # Quay config UI
+  keycloak        # Keycloak for authentication
 )
 
 # Volumes to remove
@@ -22,14 +23,14 @@ volumes=(
   quay-postgres-data
   clair-postgres-data
   quay-redis-data
-  
+  keycloak-data
 )
 
 # Stop and remove containers
 for c in "${containers[@]}"; do
-  if podman ps -a --format '{{.Names}}' | grep -q "^${c}$"; then
+  if docker ps -a --format '{{.Names}}' | grep -q "^${c}$"; then
     echo "Stopping and removing container: $c"
-    podman rm -f "$c"
+    docker rm -f "$c"
   else
     echo "Container not found: $c"
   fi
@@ -37,9 +38,9 @@ done
 
 # Remove volumes
 for v in "${volumes[@]}"; do
-  if podman volume ls --format '{{.Name}}' | grep -q "^${v}$"; then
+  if docker volume ls --format '{{.Name}}' | grep -q "^${v}$"; then
     echo "Removing volume: $v"
-    podman volume rm -f "$v"
+    docker volume rm -f "$v"
   else
     echo "Volume not found: $v"
   fi

@@ -2,13 +2,13 @@
 
 DEST_REG="quayregistry.localhost"   # your local Quay (HTTP on 80)
 
-# Get username for this registry from existing podman login
+# Get username for this registry from existing docker login
 get_login() {
   local reg="$1"
 
-  # Preferred: podman builtin
-  if podman login --get-login --tls-verify=false "$reg" >/dev/null 2>&1; then
-    podman login --get-login --tls-verify=false "$reg"
+  # Preferred: docker builtin
+  if docker login --get-login --tls-verify=false "$reg" >/dev/null 2>&1; then
+    docker login --get-login --tls-verify=false "$reg"
     return 0
   fi
 
@@ -88,16 +88,16 @@ copy_one() {
   local dst_ref="docker://${dst_repo_tag}"
 
   # Skip if already present on destination
-  if podman manifest inspect --tls-verify=false "${dst_ref}" >/dev/null 2>&1; then
+  if docker manifest inspect --tls-verify=false "${dst_ref}" >/dev/null 2>&1; then
     echo "skip  ${dst_repo_tag}"
     return 0
   fi
 
   echo "pull  ${src_image}"
-  podman pull --arch amd64 "${src_image}" >/dev/null
+  docker pull --arch amd64 "${src_image}" >/dev/null
 
   echo "push  ${dst_repo_tag}"
-  podman push --tls-verify=false "${src_image}" "${dst_ref}" >/dev/null
+  docker push --tls-verify=false "${src_image}" "${dst_ref}" >/dev/null
 }
 
 for m in "${IMAGES[@]}"; do

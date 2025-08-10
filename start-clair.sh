@@ -12,9 +12,9 @@ CLAIR_IMAGE=quay.io/projectquay/clair:4.7.2
 CLAIR_DIR=./clair-config
 
 # ----- start Clair (host net as before) -----
-podman rm -f "$CLAIR_CONT" >/dev/null 2>&1 || true
+docker rm -f "$CLAIR_CONT" >/dev/null 2>&1 || true
 
-podman run -d \
+docker run -d \
   --name "$CLAIR_CONT" \
   --restart always \
   --network host \
@@ -24,5 +24,5 @@ podman run -d \
   "$CLAIR_IMAGE"
 
 sleep 2
-podman logs --tail=80 "$CLAIR_CONT" || true
+docker logs --tail=80 "$CLAIR_CONT" || true
 

@@ -11,14 +11,14 @@ QUAY_PORT=5432
 PG_IMAGE=docker.io/postgres:16
 
 # Stop & remove Quay DB
-if podman ps -a --format "{{.Names}}" | grep -q "^${QUAY_CONT}$"; then
-  podman rm -f "${QUAY_CONT}" || true
+if docker ps -a --format "{{.Names}}" | grep -q "^${QUAY_CONT}$"; then
+  docker rm -f "${QUAY_CONT}" || true
 fi
-if podman volume ls --format "{{.Name}}" | grep -q "^${QUAY_VOL}$"; then
-  podman volume rm -f "${QUAY_VOL}" || true
+if docker volume ls --format "{{.Name}}" | grep -q "^${QUAY_VOL}$"; then
+  docker volume rm -f "${QUAY_VOL}" || true
 fi
 
-podman run -d \
+docker run -d \
   --name "${QUAY_CONT}" \
   --restart always \
   -e POSTGRES_USER="${QUAY_USER}" \
@@ -34,12 +34,12 @@ podman run -d \
   "${PG_IMAGE}"
 
 echo "Waiting for Quay Postgres on ${QUAY_PORT}..."
-until podman exec "${QUAY_CONT}" pg_isready -U "${QUAY_USER}" -d "${QUAY_DB}" -h 127.0.0.1 >/dev/null 2>&1; do
+until docker exec "${QUAY_CONT}" pg_isready -U "${QUAY_USER}" -d "${QUAY_DB}" -h 127.0.0.1 >/dev/null 2>&1; do
   sleep 1
 done
 
 # Quay requires pg_trgm
-podman exec "${QUAY_CONT}" psql -U "${QUAY_USER}" -d "${QUAY_DB}" -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
+docker exec "${QUAY_CONT}" psql -U "${QUAY_USER}" -d "${QUAY_DB}" -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
 
 # ---------- Clair Postgres ----------
 CLAIR_CONT=clair-postgres
@@ -50,14 +50,14 @@ CLAIR_DB=clair
 CLAIR_PORT=5433
 
 # Stop & remove Clair DB
-if podman ps -a --format "{{.Names}}" | grep -q "^${CLAIR_CONT}$"; then
-  podman rm -f "${CLAIR_CONT}" || true
+if docker ps -a --format "{{.Names}}" | grep -q "^${CLAIR_CONT}$"; then
+  docker rm -f "${CLAIR_CONT}" || true
 fi
-if podman volume ls --format "{{.Name}}" | grep -q "^${CLAIR_VOL}$"; then
-  podman volume rm -f "${CLAIR_VOL}" || true
+if docker volume ls --format "{{.Name}}" | grep -q "^${CLAIR_VOL}$"; then
+  docker volume rm -f "${CLAIR_VOL}" || true
 fi
 
-podman run -d \
+docker run -d \
   --name "${CLAIR_CONT}" \
   --restart always \
   -e POSTGRES_USER="${CLAIR_USER}" \
@@ -73,7 +73,7 @@ podman run -d \
   "${PG_IMAGE}"
 
 echo "Waiting for Clair Postgres on ${CLAIR_PORT}..."
-until podman exec "${CLAIR_CONT}" pg_isready -U "${CLAIR_USER}" -d "${CLAIR_DB}" -h 127.0.0.1 >/dev/null 2>&1; do
+until docker exec "${CLAIR_CONT}" pg_isready -U "${CLAIR_USER}" -d "${CLAIR_DB}" -h 127.0.0.1 >/dev/null 2>&1; do
   sleep 1
 done
 

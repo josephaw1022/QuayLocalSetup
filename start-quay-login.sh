@@ -9,7 +9,7 @@ read -rsp "Quay Password: " PASSWORD
 echo
 
 # Log in to Quay (skip TLS verification)
-echo "$PASSWORD" | podman login "$REGISTRY" \
+echo "$PASSWORD" | docker login "$REGISTRY" \
   --username "$USERNAME" \
   --password-stdin \
   --tls-verify=false

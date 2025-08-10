@@ -31,6 +31,6 @@ grep -qE "^[^#]*[[:space:]]${REG_HOST}(\$|[[:space:]])" /etc/hosts \
 echo "Configured insecure registry: ${REG}"
 echo "Now login with the port:"
 echo
-echo "  podman login ${REG} --tls-verify=false"
+echo "  docker login ${REG} --tls-verify=false"
 echo "  # or if you're using the docker wrapper:"
 echo "  docker login ${REG}    # (podman-docker will honor the config)"
