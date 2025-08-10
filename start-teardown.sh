@@ -10,6 +10,7 @@ containers=(
   quay-postgres   # Quay DB
   clair-postgres  # Clair DB
   quay-redis      # Redis/Valkey
+  quay-config-ui  # Quay config UI
 )
 
 # Volumes to remove
@@ -21,6 +22,7 @@ volumes=(
   quay-postgres-data
   clair-postgres-data
   quay-redis-data
+  
 )
 
 # Stop and remove containers
