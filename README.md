@@ -1,6 +1,6 @@
 # Running Quay Locally on Laptop
 
-You need Docker Desktop **or** Podman Desktop.
+You need Docker Desktop or Podman Desktop, plus Helm and skopeo.
 
 ## 1) Bootstrap
 
