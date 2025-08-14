@@ -2,6 +2,14 @@
 
 You need Docker Desktop or Podman Desktop, plus Helm and skopeo.
 
+**Downloads:**
+
+* [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+* [Podman Desktop](https://podman-desktop.io/)
+* [Helm (v3.8+)](https://helm.sh/docs/intro/install/)
+* [skopeo](https://github.com/containers/skopeo#install)
+
+
 ## 1) Bootstrap
 
 ```bash
